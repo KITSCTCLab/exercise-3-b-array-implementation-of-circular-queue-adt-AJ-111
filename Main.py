@@ -1,5 +1,4 @@
 class Evaluate:
-  
   """This class validates and evaluate postfix expression.
   Attributes:
       top: An integer which denotes the index of the element at the top of the stack currently.
@@ -7,17 +6,17 @@ class Evaluate:
       stack: A List which acts as a Stack.
   """
     # Write your code here
-    
 
-  def __init__(self, size):
-
+  def _init_(self, size):
     """Inits Evaluate with top, size_of_stack and stack.
     Arguments:
-      size_of_stack: An integer to set the size of stack.
+      top:An integer which points to the top most element in the stack.
+      size_of_stack: An integer which represents size of stack.
+      stack: A list which maintians the elements of stack.
     """
     self.top = -1
     self.size_of_stack = size
-    self.stack = [None]*size
+    self.stack = []
 
 
   def isEmpty(self):
@@ -26,21 +25,22 @@ class Evaluate:
     Returns:
       True if it is empty, else returns False.
     """
-    return (self.top==-1)
+    # Write your code here
+    if self.top == -1:
+      return True
+    else:
+      return False
 
 
   def pop(self):
-
     """
     Do pop operation if the stack is not empty.
     Returns:
       The data which is popped out if the stack is not empty.
     """
+    # Write your code here
     if not self.isEmpty():
-
-      k=self.stack[self.top]
-      self.top-=1
-    return k
+      self.stack.pop()
 
 
   def push(self, operand):
@@ -49,8 +49,9 @@ class Evaluate:
     Arguments:
       operand: The operand to be pushed.
     """
-    self.top+=1
-    self.stack[self.top]=operand
+    # Write your code here
+    if self.top != self.size_of_stack - 1:
+      self.stack.append(operand)
 
 
   def validate_postfix_expression(self, expression):
@@ -61,25 +62,15 @@ class Evaluate:
     Returns:
       True if the expression is valid, else returns False.
     """
-    operatorcon=0
-    operandcon=0
-    flag=0
-    for i in expression:
-
-      if(not(i=="-" or i=="+" or i=="*" or i=="/" or i=="^")):
-
-        k=int(i)
-      if(i=="-" or i=="+" or i=="*" or i=="/" or i=="^"):
-
-        operatorcon+=1
-        flag=1
-      elif(isinstance(k,int)):    
-        operandcon+=1
-        flag=1
+    # Write your code here
+    a = 0
+    b = 0
+    for element in expression:
+      if element.isnumeric():
+        a = a + 1
       else:
-        flag=0
-        break
-    if(flag==1 and operandcon==(operatorcon+1)):
+        b = b + 1
+    if b == a - 1:
       return True
     else:
       return False
@@ -93,31 +84,28 @@ class Evaluate:
     Returns:
       The result of evaluated postfix expression.
     """
-    flag=0
+    # Write your code here
+    stack = []
     for i in expression:
-
-      if(not(i=="-" or i=="+" or i=="*" or i=="/" or i=="^")):
-
-        self.push(i)
-      else:
-        self.push(i)
-        operator=self.pop()
-        secoperator=self.pop()
-        if(operator=="+"):
-
-          self.stack[self.top]=int(self.stack[self.top])+int(secoperator)
-        elif(operator=="-"):
-          self.stack[self.top]=int(self.stack[self.top])-int(secoperator)
-        elif(operator=="*"):
-          self.stack[self.top]=int(self.stack[self.top])*int(secoperator)
-        elif(operator=="/"):
-          flag=1
-          self.stack[self.top]=int(self.stack[self.top])/int(secoperator)
-        else:
-          self.stack[self.top]=int(self.stack[self.top])^int(secoperator)
-    
-    return int(self.stack[self.top])
-
+      if i.isnumeric():
+        stack.append(int(i))
+      if len(stack) >= 2:
+        if i == '+':
+          stack[-2] = stack[-2] + stack[-1]
+          stack.pop()
+        elif i == '-':
+          stack[-2] = stack[-2] - stack[-1]
+          stack.pop()
+        elif i == '*':
+          stack[-2] = stack[-2] * stack[-1]
+          stack.pop()
+        elif i == '/':
+          stack[-2] = stack[-2] / stack[-1]
+          stack.pop()
+        elif i == '^':
+          stack[-2] = stack[-2] ^ stack[-1]
+          stack.pop()
+    return int(stack[-1])
 
 # Do not change the following code
 postfix_expression = input()  # Read postfix expression
